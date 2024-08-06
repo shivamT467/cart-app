@@ -1,19 +1,21 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeCart,
-} from './redux/cartSlice';
+} from "./redux/cartSlice";
 
 const Cart = () => {
   const getData = useSelector((state) => state.clickedData.data);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let result = 0;
-  let grandTotal = getData.map((item) => (result += item.qty * item.price));
+  const grandTotal = getData.reduce(
+    (preVal, accu) => preVal + accu.qty * accu.price,
+    0
+  );
 
   return (
     <div>
@@ -21,25 +23,25 @@ const Cart = () => {
         <h2>Shopping cart</h2>
       </div>
       {getData.length > 0 ? (
-        <div className='container'>
-          <div className='cart-container'>
+        <div className="container">
+          <div className="cart-container">
             {getData.map((item, idx) => (
-              <div className='cart-content'>
-                <div className='medium-width'>
+              <div className="cart-content">
+                <div className="medium-width">
                   <img
                     src={item.image}
-                    alt='product-box'
+                    alt="product-box"
                     width={100}
                     height={75}
                   />
                 </div>
-                <div className='medium-width'>
+                <div className="medium-width">
                   <h4>{item.title}</h4>
                   <p>{item.description}</p>
                   <p>Price : {item.price}/- rs.</p>
                 </div>
-                <div className='medium-width'>
-                  <div className='qty-btns'>
+                <div className="medium-width">
+                  <div className="qty-btns">
                     <button onClick={() => dispatch(increaseQuantity(idx))}>
                       +
                     </button>
@@ -49,7 +51,7 @@ const Cart = () => {
                     </button>
                   </div>
                 </div>
-                <div className='right-items medium-width'>
+                <div className="right-items medium-width">
                   <button onClick={() => dispatch(removeCart(idx))}>
                     <AiFillCloseCircle />
                   </button>
@@ -58,17 +60,17 @@ const Cart = () => {
               </div>
             ))}
           </div>
-          <div className='bottom'>Grand toal : {grandTotal.slice(-1)} rs.</div>
+          <div className="bottom">Grand toal : {grandTotal?.toFixed(2)} rs.</div>
         </div>
       ) : (
         <>
-          <div className='alignment-center'>
-            <img src='/cart1.png' alt='cart1' width={500} />
+          <div className="alignment-center">
+            <img src="/cart1.png" alt="cart1" width={500} />
           </div>
-          <div className='alignment-center'>
+          <div className="alignment-center">
             <button
-              className='cart-bottom-btn'
-              onClick={() => navigate('/product')}
+              className="cart-bottom-btn"
+              onClick={() => navigate("/product")}
             >
               Shop now
             </button>
